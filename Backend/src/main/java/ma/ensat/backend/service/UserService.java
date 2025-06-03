@@ -2,6 +2,7 @@ package ma.ensat.backend.service;
 
 import ma.ensat.backend.dto.AuthResponseDto;
 import ma.ensat.backend.dto.LoginDto;
+import ma.ensat.backend.dto.RegisterDto;
 import ma.ensat.backend.entity.User;
 import ma.ensat.backend.repository.UserRepository;
 import ma.ensat.backend.security.JwtUtil;
@@ -52,5 +53,26 @@ public class UserService {
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public AuthResponseDto registerCustomer(RegisterDto registerDto) {
+        // Vérifier si l'utilisateur existe déjà
+        if (userRepository.existsByUsername(registerDto.getUsername())) {
+            return new AuthResponseDto(null, null, null, "Username already exists");
+        }
+
+        // Créer le nouvel utilisateur customer
+        User newUser = new User();
+        newUser.setUsername(registerDto.getUsername());
+        newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        newUser.setRole(User.Role.CUSTOMER); // Toujours CUSTOMER pour l'enregistrement public
+
+        userRepository.save(newUser);
+
+        // Générer le token JWT
+        String token = jwtUtil.generateToken(newUser.getUsername(), newUser.getRole().name());
+
+        return new AuthResponseDto(token, newUser.getUsername(), newUser.getRole().name(),
+                "Registration successful");
     }
 }
