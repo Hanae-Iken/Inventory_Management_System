@@ -1,9 +1,19 @@
 package ma.ensat.backend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "DTO de réponse d'authentification")
 public class AuthResponseDto {
+    @Schema(description = "Token JWT", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
     private String token;
+
+    @Schema(description = "Nom d'utilisateur", example = "admin")
     private String username;
+
+    @Schema(description = "Rôle de l'utilisateur", example = "ADMIN")
     private String role;
+
+    @Schema(description = "Message de réponse", example = "Authentication successful")
     private String message;
 
     // Constructeurs

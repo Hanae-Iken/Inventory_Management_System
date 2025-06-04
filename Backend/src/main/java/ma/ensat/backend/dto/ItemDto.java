@@ -1,28 +1,33 @@
 package ma.ensat.backend.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Schema(description = "DTO pour les articles")
 public class ItemDto {
+    @Schema(description = "ID de l'article", example = "1")
     private Long id;
 
     @NotBlank(message = "Item name is required")
     @Size(max = 100, message = "Item name must not exceed 100 characters")
+    @Schema(description = "Nom de l'article", example = "Laptop Dell XPS 13", required = true)
     private String name;
 
     @NotNull(message = "Price is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
+    @Schema(description = "Prix de l'article", example = "999.99", required = true)
     private BigDecimal price;
 
     @Size(max = 500, message = "Description must not exceed 500 characters")
+    @Schema(description = "Description de l'article", example = "High-performance laptop with Intel i7 processor")
     private String description;
 
+    @Schema(description = "Date de création", example = "2024-01-15T10:30:00")
     private LocalDateTime createdAt;
+
+    @Schema(description = "Date de mise à jour", example = "2024-01-16T14:20:00")
     private LocalDateTime updatedAt;
 
     // Constructeurs
